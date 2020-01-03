@@ -38,6 +38,13 @@ function init() {
 }
 
 function setupGrid() {
+    let smallest = window.innerWidth > window.innerHeight
+        ? window.innerHeight
+        : window.innerWidth;
+
+    // -2 to smallest avoids scrolling
+    let squareSize =  Math.min(20, Math.floor((smallest - 2) / gameSize.width)) + "px";
+
     for (let i = 0; i < gameSize.height; i++) {
         let row = document.createElement("DIV");
         row.className = "row";
@@ -47,6 +54,9 @@ function setupGrid() {
             let cell = document.createElement("DIV");
             cell.className = "col";
             cell.dataset["col"] = j;
+            
+            cell.style.width = squareSize;
+            cell.style.height = squareSize;
 
             row.appendChild(cell);
         }
@@ -73,9 +83,39 @@ function initInput() {
         // if not arrow key exit
         if (e.keyCode < 37 || e.keyCode > 40) return;
 
-        let currentDirection = this.direction;
+        calcDirection(e.keyCode);
+    }
 
-        switch (e.keyCode) {
+    let btnsUp = document.querySelectorAll(".controls .btn-up");
+    for (let i = 0; i < btnsUp.length; i++) {
+        const btn = btnsUp[i];
+        btn.onmousedown = function () { calcDirection(38); }
+    }
+
+    let btnsDown = document.querySelectorAll(".controls .btn-down");
+    for (let i = 0; i < btnsDown.length; i++) {
+        const btn = btnsDown[i];
+        btn.onmousedown = function() { calcDirection(40); }
+    }
+
+    let btnsLeft = document.querySelectorAll(".controls .btn-left");
+    for (let i = 0; i < btnsLeft.length; i++) {
+        const btn = btnsLeft[i];
+        btn.onmousedown = function() { calcDirection(37); }
+    }
+
+    let btnsRight = document.querySelectorAll(".controls .btn-right");
+    for (let i = 0; i < btnsRight.length; i++) {
+        const btn = btnsRight[i];
+        btn.onmousedown = function() { calcDirection(39); }
+    }
+}
+
+
+function calcDirection(keyCode) {
+    let currentDirection = this.direction;
+
+        switch (keyCode) {
             case 38: // UP
                 this.direction = 0;
                 break;
@@ -103,7 +143,6 @@ function initInput() {
             // revert to original direction
             this.direction = currentDirection;
         }
-    }
 }
 
 function setFrut() {
