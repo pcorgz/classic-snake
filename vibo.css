@@ -1,6 +1,16 @@
 * {
     font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
 }
+
+body {
+    margin: 0;
+    padding: 2px;
+    text-align: center;
+}
+
+
+/* GAME GRID */
 
 #esnak {
     display: inline-flex;
@@ -15,8 +25,6 @@
 
 #esnak .row .col {
     background-color: rgb(235, 235, 235);
-    height: 20px;
-    width: 20px;
     border: 1px solid rgb(228, 228, 228);
     display: flex;
     align-items: center;
@@ -48,4 +56,72 @@
 #esnak.lose .row .col.sn-bod::before,
 #esnak.lose .row .col.frut::after {
     background-color: #333;
+}
+
+
+/* CONTROLS */
+
+#controls-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    left: 0;
+    right: 0;
+    justify-content: center;
+}
+
+#controls-wrapper .controls {
+    width: calc(375px / 2);
+    height: calc(375px / 2);
+    opacity: .25;
+}
+
+#controls-wrapper .controls .btn-row {
+    display: flex;
+    height: 30%;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+#controls-wrapper .controls .btn-row>div {
+    width: 30%;
+}
+
+#controls-wrapper .controls .btn-row .btn {
+    background: #98ff9b;
+    border: 2px groove black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+#controls-wrapper .controls .btn-row .btn.btn-up::before {
+    content: "";
+    border: 15px solid transparent;
+    border-bottom-color: black;
+    border-top: none;
+}
+
+#controls-wrapper .controls .btn-row .btn.btn-down::before {
+    content: "";
+    border: 15px solid transparent;
+    border-top-color: black;
+    border-bottom: none;
+}
+
+#controls-wrapper .controls .btn-row .btn.btn-right::before {
+    content: "";
+    border: 15px solid transparent;
+    border-left-color: black;
+    border-right: none;
+}
+
+#controls-wrapper .controls .btn-row .btn.btn-left::before {
+    content: "";
+    border: 15px solid transparent;
+    border-right-color: black;
+    border-left: none;
 }
