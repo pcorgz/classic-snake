@@ -9,14 +9,16 @@ var esnakContainer;
 var esnakClassname = "sn-bod";
 var frutClassname = "frut";
 var gameSize = { width: 32, height: 32 };
-var gameSpeed = 5;
-var direction = 1; // [0 ^]  [1 >]  [2 v]  [3 <];
-var body = [];
-var frutPos = {};
+var gameSpeed;
+var maxGameSpeed = 500;
+var direction;
+var body;
+var frutPos;
 var gameInterval;
 var gameStatus = 1; // 1 playing; 0 not playing
 var score = 0;
 var scoreEl;
+var timer;
 
 // document ready
 (function() {
@@ -27,14 +29,40 @@ function init() {
     esnakContainer = document.getElementById("esnak");
     scoreEl = document.getElementById("score");
 
+    initVars();
     setupGrid();
     initEsnak();
     setFrut();
     initInput();
 
+    run();
+}
+
+function initVars() {
+    timer = 0;
+    gameSpeed = 100;
+    direction = 1;
+    body = [];
+    frutPos = {};
+    gameStatus = 1;
+    score = 0;
+}
+
+function reset() {
+    initVars();
+    initEsnak();
+    setFrut();
+    
+    esnakContainer.classList.remove("lose");
+    document.getElementById('message').textContent = "";
+    run();
+}
+
+function run() {
     gameInterval = setInterval(() => {
         update();
-    }, 1000 / gameSpeed);
+        draw();
+    }, 1000 / 60);
 }
 
 function setupGrid() {
@@ -66,6 +94,7 @@ function setupGrid() {
 }
 
 function initEsnak() {
+    body = [];
     body.push({ x: 0, y: 0 });
     body.push({ x: 1, y: 0 });
     body.push({ x: 2, y: 0 });
@@ -155,11 +184,15 @@ function setFrut() {
 }
 
 function update() {
-    if (gameStatus === 0) 
+    if (gameStatus === 0) {
         clearInterval(gameInterval);
-
-    moveEsnak();
-    draw();
+    }
+    
+    timer++;
+    if (timer >= 1000 / gameSpeed) {
+        timer = 0;
+        moveEsnak();
+    }
 }
 
 function moveEsnak() {
@@ -227,6 +260,10 @@ function detectCollission(newCoords) {
     // collission with fruit
     if (newCoords.x === frutPos.x && newCoords.y === frutPos.y) {
         score++;
+        if (score % 2 === 0) {
+            gameSpeed += gameSpeed < maxGameSpeed ? 20 : 0;
+            console.log(gameSpeed);
+        }
         addPart();
         setFrut();
     }
